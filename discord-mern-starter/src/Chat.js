@@ -13,6 +13,7 @@ import { useState } from 'react'
 import { useEffect } from 'react'
 import db from './firebase'
 import firebase from 'firebase'
+import axios from './axios'
 
 const Chat = () => {
     const user = useSelector(selectUser)
