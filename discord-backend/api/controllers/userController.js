@@ -1,20 +1,20 @@
-// userController.js
-const User = require('../models/userSchema');
+ 
+import User from '../models/userSchema.js';
 
 // Get all user
-// exports.getAlluser = async (req, res) => {
-//     try {
-//         const user = await User.find({});
-//         res.status(200).json(user);
-//     } catch (error) {
-//         res.status(500).json({ message: error.message });
-//     }
-// };
- 
+export const getAllUser = async (req, res) => {
+    try {
+        const user = await User.find({});
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 
 // Create a new user
 
-exports.createuser = async (req, res) => {
+export const createuser = async (req, res) => {
     try {
     
         const user = await User.create(req.body);
@@ -24,6 +24,16 @@ exports.createuser = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+
+
+
+
+
+
+
+
+
 
 // // Delete user by ID
 

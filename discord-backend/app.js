@@ -1,13 +1,14 @@
 import dotenv from 'dotenv';
-import express from 'express';
-import mongoose from 'mongoose';
-import userRoute from './api/routes/userRoute';
-
 dotenv.config();
- 
-const MONGO_URL = process.env.MONGO_URL;
-const PORT = process.env.PORT || 65;
+import express from 'express';
+import mongoose from 'mongoose'; 
+import userRoute from './api/routes/userRoute.js'
 
+
+const MONGO_URL = process.env.MONGO_URL;
+const PORT = process.env.PORT || 3000;  
+
+  
 const app = express();
 
 app.use(express.json());
@@ -16,9 +17,7 @@ app.use(express.json());
 app.use('/api', userRoute);
 
 // MongoDB connection
-mongoose
-    .connect(MONGO_URL)
-    .then(() => {
+mongoose.connect(MONGO_URL).then(() => {
         console.log('Connected to MongoDB');
 
         // Server is running after MongoDB connection
