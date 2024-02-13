@@ -1,20 +1,31 @@
  
+ 
 import User from '../models/userSchema.js';
 
-// Get all user
-export const getAllUser = async (req, res) => {
+// Get channel
+export const getChannel = async (req, res) => {
     try {
         const user = await User.find({});
-        res.status(200).json(user);
+        //get channel id and name 
+        let channels = []
+        user.map((channelData)=>{
+            const channelInfo = {
+                id: channelData._id,
+                name: channelData.channelName
+            }
+            channels.push(channelInfo)
+        })
+        console.log(channels)
+        res.status(200).json(channels);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
 
-// Create a new user
+// Create a new channel
 
-export const createuser = async (req, res) => {
+export const createChannel = async (req, res) => {
     try {
     
         const user = await User.create(req.body);
@@ -25,54 +36,57 @@ export const createuser = async (req, res) => {
     }
 };
 
+//create new message
 
 
-
-
-
-
-
-
-
-
-// // Delete user by ID
-
-// exports.deleteduserById = async (req, res) => {
-//     const id = req.params.id;
-
-//     try {
-//         const deleteduser = await user.findOneAndDelete({ id: id });
-
-//         if (!deleteduser) {
-//             return res.status(404).json({ message: 'user not found' });
-//         }
-
-//         res.status(200).json({ message: 'user deleted successfully', deleteduser });
-//     } catch (error) {
-//         res.status(500).json({ message: error.message });
-//     }
-// };
  
-// // Update user by ID
 
-// exports.updateduserById = async (req, res) => {
-//     const id = req.params.id;
+export const createNewMessage = async (req, res) => {
+    try {
+        const newMessage = req.body;
 
-//     try {
-//         // Find the existing user by ID and update with the new data
-//         const updateduser = await user.findOneAndUpdate(
-//             { id: id },
-//             req.body,
-//             { new: true, runValidators: true }
-//         );
+        const updatedUser = await User.findOneAndUpdate(
+            { _id: req.query.id },
+            { $push: { conversation: newMessage } },
+            { new: true } // To return the updated user document
+        );
 
-//         if (!updateduser) {
-//             return res.status(404).json({ message: 'user not found' });
-//         }
+        if (!updatedUser) {
+            return res.status(404).send({ message: 'User not found' });
+        }
 
-//         res.status(200).json(updateduser);
-//     } catch (error) {
-//         res.status(500).json({ message: 'Error updating user', error: error.message });
-//     }
-// };
+        res.status(200).send(updatedUser);
+    } catch (error) {
+        console.error('Error saving message:', error);
+        res.status(500).send({ error: 'Internal Server Error' });
+    }
+};
+
+
+// Get all channel
+export const getAllChannel = async (req, res) => {
+    try {
+        const user = await User.find({});
+         
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Get conversation
+export const conversation = async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        const user = await User.findOne({ id: id });
+         
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+
  

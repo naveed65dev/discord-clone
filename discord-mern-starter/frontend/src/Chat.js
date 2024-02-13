@@ -12,8 +12,7 @@ import { selectChannelId, selectChannelName } from './features/appSlice'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import db from './firebase'
-import firebase from 'firebase'
-import axios from './axios'
+import firebase from './firebase'
 
 const Chat = () => {
     const user = useSelector(selectUser)

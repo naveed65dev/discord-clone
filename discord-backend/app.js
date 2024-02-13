@@ -6,9 +6,8 @@ import userRoute from './api/routes/userRoute.js'
 
 
 const MONGO_URL = process.env.MONGO_URL;
-const PORT = process.env.PORT || 3000;  
+const PORT = process.env.PORT || 65;  
 
-  
 const app = express();
 
 app.use(express.json());
