@@ -13,7 +13,7 @@ const discordSchema = mongoose.Schema({
           default: Date.now,
         },
         user: {
-          displayname: String,
+          displayName: String,
           email: String,
           photo: String,
           uid: String,

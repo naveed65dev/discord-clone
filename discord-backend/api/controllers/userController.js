@@ -40,13 +40,15 @@ export const createChannel = async (req, res) => {
 
 
  
-
 export const createNewMessage = async (req, res) => {
     try {
         const newMessage = req.body;
 
+        // Ensure req.query.id is a valid ObjectId
+        const userId = mongoose.Types.ObjectId(req.query.id);
+
         const updatedUser = await User.findOneAndUpdate(
-            { _id: req.query.id },
+            { _id: userId },
             { $push: { conversation: newMessage } },
             { new: true } // To return the updated user document
         );

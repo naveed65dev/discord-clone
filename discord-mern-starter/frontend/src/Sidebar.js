@@ -17,20 +17,23 @@ import { useState } from 'react'
 import { useEffect } from 'react'
 import axios from './axios'
  
+
 const Sidebar = () => {
     const user = useSelector(selectUser)
-    const [channels, setChannels] = useState([])
 
+    const [channels, setChannels] = useState([])
+ 
         const getChannels = ()=>{
-            axios.get('/api/channlelist').then((res)=>{
-                setChannels(res.User)
+            axios.get(`/api/channellist`).then((res)=>{
+                setChannels(res.data)
             })
         }
 
     useEffect(() => {
         getChannels()
     }, [])
-
+    
+    
     const handleAddChannel = (e) => {
         e.preventDefault()
 
@@ -62,9 +65,10 @@ const Sidebar = () => {
                 </div>
                 <div className="sidebar__channelsList">
                     {
-                        channels.map(channel => (
+                       channels.map(channel => (
                             <SidebarChannel key={channel.id} id={channel.id} channelName={channel.channelName} />
                         ))
+                        
                     }
                 </div>
             </div>

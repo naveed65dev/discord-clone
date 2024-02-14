@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
-import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
+//firebase configration
 const firebaseConfig = {
     apiKey: "AIzaSyB3jzUvJfY5HADXW1Uh6k7CscHp823twWI",
     authDomain: "discord-clone-15794.firebaseapp.com",
@@ -10,12 +10,21 @@ const firebaseConfig = {
     messagingSenderId: "374084316470",
     appId: "1:374084316470:web:fd071e0335a65a166ed797"
 };
-
+//firebasse auth
 const firebaseApp = initializeApp(firebaseConfig);
-
-const db = getFirestore(firebaseApp);
 const auth = getAuth(firebaseApp);
 const provider = new GoogleAuthProvider();
 
-export { auth, provider };
-export default db;
+//signIn function popup
+const signIn = async () => {
+    try {
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+        console.log(user);
+    } catch (error) {
+        console.error(error.message);
+    }
+};
+
+export { auth, provider, signIn };
+export default firebaseApp;
