@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import Sidebar from './Sidebar';
-import ExpandMore from '@material-ui/icons/ExpandMore'
+ 
 import Chat from './Chat';
 import { selectUser } from './features/userSlice';
 import { useDispatch, useSelector } from 'react-redux'

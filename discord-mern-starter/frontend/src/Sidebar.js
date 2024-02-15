@@ -12,11 +12,11 @@ import HeadsetIcon from '@material-ui/icons/Headset'
 import SettingsIcon from '@material-ui/icons/Settings'
 import { useSelector } from 'react-redux'
 import { selectUser } from './features/userSlice'
-import db, { auth } from './firebase'
+import  { auth } from './firebase'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import axios from './axios'
- 
+
 
 const Sidebar = () => {
     const user = useSelector(selectUser)
@@ -24,7 +24,7 @@ const Sidebar = () => {
     const [channels, setChannels] = useState([])
  
         const getChannels = ()=>{
-            axios.get(`/api/channellist`).then((res)=>{
+            axios.get(`/api/get/channel`).then((res)=>{
                 setChannels(res.data)
             })
         }
@@ -37,14 +37,22 @@ const Sidebar = () => {
     const handleAddChannel = (e) => {
         e.preventDefault()
 
-        const channelName = prompt('Enter a new channel name')
+       
+const channelName = prompt('Enter a new channel name');
 
-        if (channelName) {
-            db.collection('channels').add({
-                channelName: channelName
-            })
+if (channelName) {
+    // Replace the URL with your actual MongoDB endpoint
+    const apiUrl = '/api/new/channel';
 
-        }
+    // Make a POST request to store the channel name
+    axios.post(apiUrl, { channelName })
+        .then(response => {
+            console.log('Channel added successfully:', response.data);
+        })
+        .catch(error => {
+            console.error('Error adding channel:', error);
+        });
+}
     }
 
     return (
@@ -66,7 +74,7 @@ const Sidebar = () => {
                 <div className="sidebar__channelsList">
                     {
                        channels.map(channel => (
-                            <SidebarChannel key={channel.id} id={channel.id} channelName={channel.channelName} />
+                            <SidebarChannel key={channel.id} id={channel._id} channelName={channel.channelName} />
                         ))
                         
                     }

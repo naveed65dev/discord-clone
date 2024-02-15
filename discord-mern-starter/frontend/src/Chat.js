@@ -21,30 +21,40 @@ const Chat = () => {
     const [messages, setMessages] = useState([])
 
 
-    const getConversation = (channelId)=>{
-            if(channelId){
-                axios.get(`/api/conversation?id=${channelId}`).then((res)=>{
-                    setMessages(res.data[0].conversation)
-                })
-            }
-    }
-
-    useEffect(() => {
-         
+    const getConversation = async (channelId) => {
+        try {
+            console.log(channelId, "channelId")
+          if (channelId) {
+            const response = await axios.get(`/api/get/conversation?id=${channelId}`);
+            console.log('API Response:', response.data);
+            setMessages(response.data[0]?.conversation || []);
+          }
+        } catch (error) {
+          console.error('Error fetching conversation:', error);
+          // Handle error as needed
+        }
+      };
+      
+      
+      useEffect(() => {
         getConversation(channelId)
-    }, [channelId])
-
-    const sendMessage = (e) => {
+      }, [channelId])
+      
+      const sendMessage = async (e) => {
         e.preventDefault();
     
-        axios.post(`/api/new/message?id=${channelId}`, {
-            message: input,
-            timestamp: Date.now(),
-            user: user,
-        })
-      
+        try {
+            await axios.post(`/api/new/message?id=${channelId}`, {
+                message: input,
+                timestamp: Date.now(),
+                user: user,
+            });
     
-        setInput('');
+            setInput('');
+        } catch (error) {
+            console.error('Error sending message:', error);
+            // Handle error as needed
+        }
     };
     
     
@@ -54,17 +64,21 @@ const Chat = () => {
             <ChatHeader channelName={channelName} />
 
             <div className="chat__messages">
-          
+      
+            
                 {messages.map(message => (
-                    <Message message={message.message} timestamp={message.timestamp} user={message.user} />
-                ))}
+                                 <Message message={message.message} timestamp={message.timestamp} user={message.user} />
+            ))}
+
             </div>
 
             <div className="chat__input">
                 <AddCircleIcon fontSize='large' />
                 <form>
                     <input type="text"   value={input} onChange={(e) => setInput(e.target.value)} placeholder={`Message #${channelName}`} />
-                    <button className='chat__inputButton' onClick={sendMessage}   type='submit'>Send Message</button>
+                  
+                    <button className='chat__inputButton' onClick={sendMessage} type='submit'>Send Message</button>
+
                 </form>
 
                 <div className="chat__inputIcon">

@@ -1,9 +1,9 @@
- 
+ import mongoose from 'mongoose';
  
 import User from '../models/userSchema.js';
 
 // Get channel
-export const getChannel = async (req, res) => {
+export const getAllChannel = async (req, res) => {
     try {
         const user = await User.find({});
         //get channel id and name 
@@ -37,21 +37,22 @@ export const createChannel = async (req, res) => {
 };
 
 //create new message
-
-
- 
 export const createNewMessage = async (req, res) => {
     try {
+        console.log('Request received:', req.body);
+
         const newMessage = req.body;
 
-        // Ensure req.query.id is a valid ObjectId
-        const userId = mongoose.Types.ObjectId(req.query.id);
+        // Assuming req.query.id contains a valid ObjectId string
+        const userId = req.query.id;
 
         const updatedUser = await User.findOneAndUpdate(
             { _id: userId },
             { $push: { conversation: newMessage } },
             { new: true } // To return the updated user document
         );
+
+        console.log('Updated User:', updatedUser);
 
         if (!updatedUser) {
             return res.status(404).send({ message: 'User not found' });
@@ -60,13 +61,13 @@ export const createNewMessage = async (req, res) => {
         res.status(200).send(updatedUser);
     } catch (error) {
         console.error('Error saving message:', error);
-        res.status(500).send({ error: 'Internal Server Error' });
+        res.status(500).send({ error: 'Internal Server Error', details: error.message });
     }
 };
 
 
-// Get all channel
-export const getAllChannel = async (req, res) => {
+// Get all channel with conversation
+export const getChannel = async (req, res) => {
     try {
         const user = await User.find({});
          
@@ -78,10 +79,10 @@ export const getAllChannel = async (req, res) => {
 
 // Get conversation
 export const conversation = async (req, res) => {
-    const id = req.params.id;
+    const id = req.query.id;
 
     try {
-        const user = await User.findOne({ id: id });
+        const user = await User.find({ _id: id });
          
         res.status(200).json(user);
     } catch (error) {

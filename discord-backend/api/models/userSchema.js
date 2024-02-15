@@ -1,10 +1,7 @@
 import mongoose from "mongoose";
 
 const discordSchema = mongoose.Schema({
-    channelName: {
-      type: String,
-      required: true,
-    },
+    channelName: String,
     conversation: [
       {
         message: String,
