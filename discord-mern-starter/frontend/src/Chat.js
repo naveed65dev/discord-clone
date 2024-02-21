@@ -68,7 +68,11 @@ const Chat = () => {
                 
                 return;
             }
-    
+
+
+    if(input === ''){
+       return toast.error('message is empty')
+    }
             await axios.post(`/api/new/message?id=${channelId}`, {
                 message: input,
                 timestamp: Date.now(),
@@ -80,6 +84,7 @@ const Chat = () => {
             });
     
             setInput('');
+        
         } catch (error) {
             console.error('Error sending message:', error);
             toast.error('Error sending message');
