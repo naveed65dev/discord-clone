@@ -12,7 +12,8 @@ import { selectChannelId, selectChannelName } from './features/appSlice'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import axios from './axios'
- 
+import {toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const Chat = () => {
     const user = useSelector(selectUser)
     const channelId = useSelector(selectChannelId)
@@ -23,17 +24,32 @@ const Chat = () => {
 
     const getConversation = async (channelId) => {
         try {
-            console.log(channelId, "channelId")
-          if (channelId) {
-            const response = await axios.get(`/api/get/conversation?id=${channelId}`);
-            console.log('API Response:', response.data);
-            setMessages(response.data[0]?.conversation || []);
-          }
+            console.log(channelId, "channelId");
+            if (channelId) {
+               
+                const token = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2lkZW50aXR5dG9vbGtpdC5nb29nbGVhcGlzLmNvbS9nb29nbGUuaWRlbnRpdHkuaWRlbnRpdHl0b29sa2l0LnYxLklkZW50aXR5VG9vbGtpdCIsImlhdCI6MTcwODQzODg3MSwiZXhwIjoxNzA4NDQyNDcxLCJpc3MiOiJmaXJlYmFzZS1hZG1pbnNkay1uNmZlNUBkaXNjb3JkLWNsb25lLTE1Nzk0LmlhbS5nc2VydmljZWFjY291bnQuY29tIiwic3ViIjoiZmlyZWJhc2UtYWRtaW5zZGstbjZmZTVAZGlzY29yZC1jbG9uZS0xNTc5NC5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsInVpZCI6Im5hdmVlZDY1ZGV2QGdtYWlsLmNvbSIsImNsYWltcyI6eyJleHBpcmVzSW4iOiIxNWQifX0.kOvjLrWvAD6BZ_pNkbGBdQII1JzIr1HNI10OFs6jrQbm2E7sVMYlDMrroe7r2daDx7MjMJjxyi8y3ncIecLLzu0XN4TlzJFAVhdEDNOh6NXkmpp8gNvFQdTpspO8WhU5lJ9xY3HoehP3qGBytmFjqPAur42qLSlT4Sb-AN9En6jMfehOu8h94n7_m7bW6-D9Fst-oBzXq76nJobjwBKgEifBKaQqzFwHYzyAaN8bLDOXQOsyZOfn2EtETxtVvFZO79E3jTPnZhYzb7pjZ89i9MyenJUdjUrbmKAOZxEr-CAR5pUmAQUCoCF175f9WxfIVkwnNXW1zp1Usuyz-_x1DA';
+    
+                if (!token) {
+                    toast.error('JWT token not found');
+                     
+                    return;
+                }
+    
+                const response = await axios.get(`/api/get/conversation?id=${channelId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+    
+                console.log('API Response:', response.data);
+                setMessages(response.data[0]?.conversation || []);
+            }
         } catch (error) {
-          console.error('Error fetching conversation:', error);
-          // Handle error as needed
+            console.error('Error fetching conversation:', error);
+            toast.error('Error fetching conversation');
         }
-      };
+    };
+    
       
       
       useEffect(() => {
@@ -44,18 +60,32 @@ const Chat = () => {
         e.preventDefault();
     
         try {
+          
+            const token = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2lkZW50aXR5dG9vbGtpdC5nb29nbGVhcGlzLmNvbS9nb29nbGUuaWRlbnRpdHkuaWRlbnRpdHl0b29sa2l0LnYxLklkZW50aXR5VG9vbGtpdCIsImlhdCI6MTcwODQzODg3MSwiZXhwIjoxNzA4NDQyNDcxLCJpc3MiOiJmaXJlYmFzZS1hZG1pbnNkay1uNmZlNUBkaXNjb3JkLWNsb25lLTE1Nzk0LmlhbS5nc2VydmljZWFjY291bnQuY29tIiwic3ViIjoiZmlyZWJhc2UtYWRtaW5zZGstbjZmZTVAZGlzY29yZC1jbG9uZS0xNTc5NC5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsInVpZCI6Im5hdmVlZDY1ZGV2QGdtYWlsLmNvbSIsImNsYWltcyI6eyJleHBpcmVzSW4iOiIxNWQifX0.kOvjLrWvAD6BZ_pNkbGBdQII1JzIr1HNI10OFs6jrQbm2E7sVMYlDMrroe7r2daDx7MjMJjxyi8y3ncIecLLzu0XN4TlzJFAVhdEDNOh6NXkmpp8gNvFQdTpspO8WhU5lJ9xY3HoehP3qGBytmFjqPAur42qLSlT4Sb-AN9En6jMfehOu8h94n7_m7bW6-D9Fst-oBzXq76nJobjwBKgEifBKaQqzFwHYzyAaN8bLDOXQOsyZOfn2EtETxtVvFZO79E3jTPnZhYzb7pjZ89i9MyenJUdjUrbmKAOZxEr-CAR5pUmAQUCoCF175f9WxfIVkwnNXW1zp1Usuyz-_x1DA';
+    
+            if (!token) {
+                toast.error('JWT token not found');
+                
+                return;
+            }
+    
             await axios.post(`/api/new/message?id=${channelId}`, {
                 message: input,
                 timestamp: Date.now(),
                 user: user,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
             });
     
             setInput('');
         } catch (error) {
             console.error('Error sending message:', error);
-            // Handle error as needed
+            toast.error('Error sending message');
         }
     };
+    
     
     
 
