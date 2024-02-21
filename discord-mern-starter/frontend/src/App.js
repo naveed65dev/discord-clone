@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.css';
 import Sidebar from './Sidebar';
- 
 import Chat from './Chat';
 import { selectUser } from './features/userSlice';
 import { useDispatch, useSelector } from 'react-redux'
@@ -9,6 +8,7 @@ import Login from './Login';
 import { useEffect } from 'react';
 import { auth } from './firebase';
 import { login, logout } from './features/userSlice'
+
 
 function App() {
   const dispatch = useDispatch()
